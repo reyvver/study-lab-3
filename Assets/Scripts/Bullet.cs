@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using DefaultNamespace;
+using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
 	public float speed = 10f;
 
 	// Обратите внимание на этот раз это локальная переменная
-	GameManager gameManager; 
+	GameManager gameManager;
+	[SerializeField] private RigidbodyExtension[] bullets;
 
 	void Start()
 	{
@@ -14,8 +16,12 @@ public class Bullet : MonoBehaviour
 		// Ссылка на скрипт GameManager сохраняется в переменной gameManager
 		gameManager = GameObject.FindObjectOfType<GameManager>();
 
-		Rigidbody2D rigidBody = GetComponent<Rigidbody2D>();
-		rigidBody.velocity = new Vector2(0f, speed);
+		foreach (var rb in bullets)
+		{
+			var angle = rb.Rotation;
+			rb.AddForce(rb.transform.up * speed, ForceMode2D.Impulse);
+			rb.CollistionEnter += OnCollisionEnter2D;
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D other)
