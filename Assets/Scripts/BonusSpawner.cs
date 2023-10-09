@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace DefaultNamespace
 {
@@ -7,17 +8,23 @@ namespace DefaultNamespace
     {	
 	    [FormerlySerializedAs("meteorPrefab")] public GameObject[] bonusPrefabs;
 
-	    public float minSpawnDelay = 1f;
-	    public float maxSpawnDelay = 3f;
+	    public float minSpawnDelay = 30f;
+	    public float maxSpawnDelay = 60f;
 	    public float spawnXLimit = 6f;
 
 	    private bool spawnStopped;
+	    GameManager gameManager;
 
 	    void Start()
 	    {
-		    Spawn();
-		    GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
+		    Invoke("Spawn", Random.Range(minSpawnDelay, maxSpawnDelay));
+		    gameManager = GameObject.FindObjectOfType<GameManager>();
 		    gameManager.Stop += StopSpawn;
+	    }
+
+	    private void OnDestroy()
+	    {
+		    gameManager.Stop -= StopSpawn;
 	    }
 
 	    private void StopSpawn()

@@ -33,6 +33,8 @@ public class Bullet : MonoBehaviour
 			rb.SetStatic();
 			rb.CollistionEnter -= BulletCollision;
 		}
+		
+		gameManager.Stop -= StopBullets;
 	}
 
 	private void BulletCollision(GameObject bullet, GameObject other)

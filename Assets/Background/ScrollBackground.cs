@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ScrollBackground : MonoBehaviour
@@ -8,11 +9,21 @@ public class ScrollBackground : MonoBehaviour
     public float upperYValue = 40f;
 
     private bool stopped;
+    private GameManager gameManager;
     private void Awake()
     {
-        GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+        if (gameManager == null) return;
         gameManager.Stop += Stop;
         gameManager.SpeedUp += SpeedUp;
+    }
+
+    private void OnDestroy()
+    {
+        if (gameManager == null) return;
+
+        gameManager.Stop -= Stop;
+        gameManager.SpeedUp -= SpeedUp;
     }
 
     private void SpeedUp()

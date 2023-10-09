@@ -50,6 +50,11 @@ public class ShipControl : MonoBehaviour
 		ChangeSet();
 	}
 
+	private void OnDestroy()
+	{
+		gameManager.Stop -= StopShip;
+	}
+
 	private void StopShip()
 	{
 		shipStopped = true;

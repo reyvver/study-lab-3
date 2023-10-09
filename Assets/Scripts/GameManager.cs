@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,14 +12,15 @@ public class GameManager : MonoBehaviour
 	public event Action SpeedUp;
 	public event Action Stop;
 	
+	public GameObject gameOverUI;
 	public TextMeshProUGUI scoreText;
-	public TextMeshProUGUI gameOverText;
 
 	public static bool Stopped;
 	int playerScore = 0;
 
 	private void Awake()
 	{
+		Stopped = false;
 		Invoke(nameof(SpeedUpGame), current);
 	}
 
@@ -31,10 +33,15 @@ public class GameManager : MonoBehaviour
 	public void PlayerDied()
 	{
 		Stopped = true;
-		gameOverText.gameObject.SetActive(true);
+		gameOverUI.SetActive(true);
 		Stop?.Invoke();
 	}
 
+	public void RestartGame()
+	{
+		SceneManager.LoadScene(sceneBuildIndex: 1);
+	}
+	
 	private void SpeedUpGame()
 	{
 		if (Stopped) return;

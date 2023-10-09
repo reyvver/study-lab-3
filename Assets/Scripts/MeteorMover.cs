@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using DefaultNamespace;
 
@@ -14,7 +15,6 @@ public class MeteorMover : MonoBehaviour
 	
 	void Start()
 	{
-	
 		lives = hitsToDestroy;
 		rigidBody = GetComponent<Rigidbody2D>();
 		gameManager = GameObject.FindObjectOfType<GameManager>();
@@ -35,7 +35,7 @@ public class MeteorMover : MonoBehaviour
 		if (lives == 0)
 		{
 			gameManager.AddScore(hitsToDestroy);
-			Destroy(gameObject);
+			DestroyThis();
 		}
 		else
 		{
@@ -62,14 +62,20 @@ public class MeteorMover : MonoBehaviour
 		meteorFill.SetActive(false);
 	}
 	
-	private void OnDestroy()
+	private void DestroyThis()
 	{
 		StopAllCoroutines();
 		var ps = Instantiate(particleSystem);
 		ps.transform.position = rigidBody.position;
 		ps.Play();
+		Destroy(gameObject);
 	}
-	
+
+	private void OnDestroy()
+	{
+		gameManager.Stop -= GameManagerOnStop;
+	}
+
 	private void GameManagerOnStop()
 	{
 		if (rigidBody == null) return;

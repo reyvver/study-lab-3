@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MeteorSpawn : MonoBehaviour
 {
@@ -8,19 +10,26 @@ public class MeteorSpawn : MonoBehaviour
 	public float minSpawnDelay = 1f;
 	public float maxSpawnDelay = 3f;
 	public float spawnXLimit = 6f;
-	public static float speed = -1;
+	public static float speed;
 	public float startSpeed = -2;
 
 	public float step = 0.2f;
 	private bool spawnStopped;
+	private GameManager gameManager;
 
 	void Start()
 	{
 		speed = startSpeed;
 		Spawn();
-		GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
+		gameManager = GameObject.FindObjectOfType<GameManager>();
 		gameManager.Stop += StopSpawn;
 		gameManager.SpeedUp += SpeedUp;
+	}
+
+	private void OnDestroy()
+	{
+		gameManager.Stop -= StopSpawn;
+		gameManager.SpeedUp -= SpeedUp;
 	}
 
 	private void SpeedUp()
