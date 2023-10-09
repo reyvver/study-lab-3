@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	public float minSpeedUp = 3;
-	public float current = 40;
+	public float current = 25;
 	public float speedUpStep = 2;
 	public static float speedUpCoef = 1.2f;
 	public event Action SpeedUp;
@@ -13,12 +13,13 @@ public class GameManager : MonoBehaviour
 	
 	public TextMeshProUGUI scoreText;
 	public TextMeshProUGUI gameOverText;
-	
+
+	public static bool Stopped;
 	int playerScore = 0;
 
 	private void Awake()
 	{
-		Invoke(nameof(SpeedUpGame), 0);
+		Invoke(nameof(SpeedUpGame), current);
 	}
 
 	public void AddScore(int points=1)
@@ -29,16 +30,19 @@ public class GameManager : MonoBehaviour
 
 	public void PlayerDied()
 	{
+		Stopped = true;
 		gameOverText.gameObject.SetActive(true);
 		Stop?.Invoke();
 	}
 
 	private void SpeedUpGame()
 	{
+		if (Stopped) return;
+		
 		current -= speedUpStep;
 		if (current <= minSpeedUp) current = minSpeedUp;
 
-		MeteorMover.speed *= speedUpCoef;
+		MeteorSpawn.speed *= speedUpCoef;
 		SpeedUp?.Invoke();
 		Invoke(nameof(SpeedUpGame), current);
 	}

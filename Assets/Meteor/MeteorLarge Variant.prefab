@@ -13,6 +13,10 @@ PrefabInstance:
       value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 1473237558594889971, guid: 9c27e574d5944455580055fe0a60136b, type: 3}
+      propertyPath: startSpeed
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1473237558594889971, guid: 9c27e574d5944455580055fe0a60136b, type: 3}
       propertyPath: hitsToDestroy
       value: 5
       objectReference: {fileID: 0}

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ScrollBackground : MonoBehaviour
 {
+    public float maxSpeed = 12f;
     public float speed = -2f;
     public float lowerYValue = -20;
     public float upperYValue = 40f;
@@ -17,6 +18,7 @@ public class ScrollBackground : MonoBehaviour
     private void SpeedUp()
     {
         speed *= GameManager.speedUpCoef;
+        if (speed > maxSpeed) speed = maxSpeed;
     }
 
     private void Stop()

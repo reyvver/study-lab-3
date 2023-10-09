@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using DefaultNamespace;
 using UnityEngine;
 
 public class ShipControl : MonoBehaviour
@@ -6,6 +8,8 @@ public class ShipControl : MonoBehaviour
 	// Cоздаем переменные для менеджера игры,
 	// префаба снаряда, скорости, ограничения движения
 	// и скорострельности
+	[SerializeField] private float bonusDuration = 3f;
+	[SerializeField] private GameObject shield;
 	[SerializeField] private ShootingSet[] sets;
 	public GameManager gameManager;
 	public float speed = 10f;
@@ -13,7 +17,7 @@ public class ShipControl : MonoBehaviour
 
 
 	float elapsedTime = 0;
-
+	
 	[Serializable]
 	private class ShootingSet
 	{
@@ -26,6 +30,15 @@ public class ShipControl : MonoBehaviour
 	private bool shipStopped;
 	private Vector2 screenBounds;
 
+	private Coroutine bonusShield;
+	private Coroutine bonusBullet;
+
+	private float shieldTime;
+	private float bulletTime;
+	private bool shieldIsActive;
+	private bool bulletIsActive;
+ 
+	
 	private void Awake()
 	{
 		screenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
@@ -65,11 +78,6 @@ public class ShipControl : MonoBehaviour
 			Instantiate(current.bulletPrefab, spawnPos, Quaternion.identity);
 			elapsedTime = 0f; 
 		}
-
-		if (Input.GetButtonDown("Jump"))
-		{
-			ChangeSet();
-		}
 	}
 
 	private void ChangeSet()
@@ -81,6 +89,70 @@ public class ShipControl : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
+		if (other.transform.TryGetComponent(out Bonus b)) return;
+		
+		if (shieldIsActive)
+		{
+			shieldIsActive = false;
+			Destroy(other.gameObject);
+			return;
+		}
 		gameManager.PlayerDied();
+	}
+
+	public void AddBonus(Bonus.BonusType bonusType)
+	{
+		switch (bonusType)
+		{
+			case Bonus.BonusType.Shield:
+				if (shieldIsActive) shieldTime += bonusDuration;
+				else
+				{
+					shieldTime = bonusDuration;
+					bonusShield = StartCoroutine(BonusCoroutine(bonusType));
+				}
+				break;		
+			
+			case Bonus.BonusType.Bullets:
+				if (bulletIsActive) bulletTime += bonusDuration;
+				else
+				{
+					bulletTime = bonusDuration;
+					bonusBullet = StartCoroutine(BonusCoroutine(bonusType));
+				}
+				break;
+		}
+	}
+
+	private IEnumerator BonusCoroutine(Bonus.BonusType bonusType)
+	{
+		float t = 0;
+
+		if (bonusType == Bonus.BonusType.Shield)
+		{
+			shieldIsActive = true;
+			shield.SetActive(true);
+		}
+		else ChangeSet();
+		
+		while (t < (bonusType == Bonus.BonusType.Shield ? shieldTime : bulletTime))
+		{
+			if (bonusType == Bonus.BonusType.Shield && !shieldIsActive)
+				break;
+			
+			t += Time.deltaTime;
+			yield return null;
+		}
+
+		if (bonusType == Bonus.BonusType.Shield)
+		{
+			shieldIsActive = false;
+			shield.SetActive(false);
+		}
+		else
+		{
+			bulletIsActive = false;
+			ChangeSet();
+		}
 	}
 }

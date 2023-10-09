@@ -230,7 +230,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 2
+  m_Constraints: 0
 --- !u!114 &1473237558594889971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cf4f6f0d1ae4008ad60b80cd9f18c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startSpeed: 4
   meteorFill: {fileID: 2671939152438519429}
   timeFlash: 0.2
   hitsToDestroy: 1

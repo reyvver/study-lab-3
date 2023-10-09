@@ -8,24 +8,23 @@ public class MeteorMover : MonoBehaviour
 	public float timeFlash;
 	public int hitsToDestroy;
 	public ParticleSystem particleSystem;
-	public static float speed = -2f;
 	Rigidbody2D rigidBody;
 	private GameManager gameManager;
-	private bool stopped;
 	private int lives;
 	
 	void Start()
 	{
+	
 		lives = hitsToDestroy;
 		rigidBody = GetComponent<Rigidbody2D>();
 		gameManager = GameObject.FindObjectOfType<GameManager>();
 		gameManager.Stop += GameManagerOnStop;
 	}
-
-	private void Update()
+	
+	private void LateUpdate()
 	{
-		if (stopped) return;
-		transform.Translate(new Vector2(0, speed*Time.deltaTime));
+		if (GameManager.Stopped) return;
+		transform.Translate(new Vector2(0, -MeteorSpawn.speed*Time.deltaTime));
 	}
 
 	private void OnCollisionEnter2D(Collision2D other)
@@ -75,7 +74,6 @@ public class MeteorMover : MonoBehaviour
 	{
 		if (rigidBody == null) return;
 
-		stopped = true;
 		rigidBody.bodyType = RigidbodyType2D.Static;
 		transform.GetComponent<Animator>().enabled = false;
 	}

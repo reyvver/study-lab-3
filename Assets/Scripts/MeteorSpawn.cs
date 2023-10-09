@@ -2,20 +2,21 @@
 
 public class MeteorSpawn : MonoBehaviour
 {
-	// Переменная, которая соответствует префабу метеора
 	public GameObject[] meteorPrefab;
-	// Переменные для управления временем появления метеоров
+
+	public float maxSpeed = 15f;
 	public float minSpawnDelay = 1f;
 	public float maxSpawnDelay = 3f;
-	// Переменная для управления появлением метеора в разных местах экрана
 	public float spawnXLimit = 6f;
+	public static float speed = -1;
+	public float startSpeed = -2;
 
 	public float step = 0.2f;
 	private bool spawnStopped;
 
 	void Start()
 	{
-		// Появление и размещение метеоров
+		speed = startSpeed;
 		Spawn();
 		GameManager gameManager = GameObject.FindObjectOfType<GameManager>();
 		gameManager.Stop += StopSpawn;
@@ -25,6 +26,7 @@ public class MeteorSpawn : MonoBehaviour
 	private void SpeedUp()
 	{
 		maxSpawnDelay -= step;
+		if (speed > maxSpeed) speed = maxSpeed;
 	}
 
 	private void StopSpawn()
@@ -37,13 +39,10 @@ public class MeteorSpawn : MonoBehaviour
 		if (spawnStopped) return;
 		if (maxSpawnDelay <= minSpawnDelay) maxSpawnDelay = minSpawnDelay;
 		float random = Random.Range(-spawnXLimit, spawnXLimit);
-		// Определяется положение нового метеора
-		Vector3 spawnPos = transform.position + new Vector3(random, 0f, 0f);
-		// Инициализируется (создается) метеор в новой точке, 
-		// задавая вращение по умолчанию
-		Instantiate(SelectRandMeteor(), spawnPos, Quaternion.identity);
 
-		// Функция спауна вызывается снова через случайный промежуток времени
+		Vector3 spawnPos = transform.position + new Vector3(random, 0f, 0f);
+		
+		Instantiate(SelectRandMeteor(), spawnPos, Quaternion.identity);
 		Invoke("Spawn", Random.Range(minSpawnDelay, maxSpawnDelay - step));
 	}
 
