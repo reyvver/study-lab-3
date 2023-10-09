@@ -21,9 +21,9 @@ public class GameManager : MonoBehaviour
 		Invoke(nameof(SpeedUpGame), 0);
 	}
 
-	public void AddScore()
+	public void AddScore(int points=1)
 	{
-		playerScore++;
+		playerScore+=points;
 		scoreText.text = playerScore.ToString();
 	}
 

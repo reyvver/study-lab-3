@@ -452,10 +452,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffb205dbb03d342a49b6414465f54da9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meteorPrefab: {fileID: 4183970962848395889, guid: 9c27e574d5944455580055fe0a60136b, type: 3}
+  meteorPrefab:
+  - {fileID: 4183970962848395889, guid: 9c27e574d5944455580055fe0a60136b, type: 3}
+  - {fileID: 8329685223210150282, guid: 9d22abea54b2e4f1681f6808ed6a8221, type: 3}
   minSpawnDelay: 1
   maxSpawnDelay: 3
   spawnXLimit: 6
+  step: 0.2
 --- !u!4 &555289029
 Transform:
   m_ObjectHideFlags: 0
@@ -537,6 +540,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16f319197ce9d4cd8bfaedbef34bd3ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSpeedUp: 3
+  current: 40
+  speedUpStep: 2
   scoreText: {fileID: 296864540}
   gameOverText: {fileID: 347283334}
 --- !u!4 &605032484
@@ -735,7 +741,7 @@ GameObject:
   - component: {fileID: 951611423}
   - component: {fileID: 951611422}
   - component: {fileID: 951611424}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shredder_Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -776,7 +782,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 951611421}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalPosition: {x: 0, y: 6.65, z: 0}
   m_LocalScale: {x: 1.5, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1031,7 +1037,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1337950076}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -10, z: 0}
+  m_LocalPosition: {x: 0, y: -7.62, z: 0}
   m_LocalScale: {x: 1.5, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1183,6 +1189,10 @@ PrefabInstance:
       propertyPath: sets.Array.data[0].bulletPrefab
       value: 
       objectReference: {fileID: 4093989808058410348, guid: 624fae3352d08443d95463710c26ea86, type: 3}
+    - target: {fileID: 387741278160608348, guid: 88866677631e94f5a852c13715079e07, type: 3}
+      propertyPath: sets.Array.data[1].bulletPrefab
+      value: 
+      objectReference: {fileID: 2457789007915877005, guid: 0a7271f99f38845feac2c8eb03da3d58, type: 3}
     - target: {fileID: 387741278160608351, guid: 88866677631e94f5a852c13715079e07, type: 3}
       propertyPath: m_RootOrder
       value: -1

@@ -6,7 +6,7 @@ namespace DefaultNamespace
     [RequireComponent(typeof(Rigidbody2D))]
     public class RigidbodyExtension : MonoBehaviour
     {
-        public event Action<GameObject, GameObject, bool> CollistionEnter;
+        public event Action<GameObject, GameObject> CollistionEnter;
         private Rigidbody2D _rb;
         
         private void Awake()
@@ -21,12 +21,12 @@ namespace DefaultNamespace
 
         void OnCollisionEnter2D(Collision2D other)
         {
-            CollistionEnter?.Invoke(gameObject, other.gameObject, true);
+            CollistionEnter?.Invoke(gameObject, other.gameObject);
         }
 
         private void OnDestroy()
         {
-            CollistionEnter?.Invoke(gameObject, null, false);
+            CollistionEnter?.Invoke(gameObject, null);
         }
 
         public void SetStatic()

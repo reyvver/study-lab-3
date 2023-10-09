@@ -35,15 +35,9 @@ public class Bullet : MonoBehaviour
 		}
 	}
 
-	private void BulletCollision(GameObject bullet, GameObject other, bool meteor)
+	private void BulletCollision(GameObject bullet, GameObject other)
 	{
 		currentBullets--;
-		if (meteor) 
-		{
-			Destroy(other.gameObject); // Уничтожение метеора
-			gameManager.AddScore(); // Увеличение счета 
-		}
-		
 		Destroy(bullet.gameObject); 
 		if (currentBullets == 0)
 		{

@@ -3,7 +3,7 @@
 public class MeteorSpawn : MonoBehaviour
 {
 	// Переменная, которая соответствует префабу метеора
-	public GameObject meteorPrefab;
+	public GameObject[] meteorPrefab;
 	// Переменные для управления временем появления метеоров
 	public float minSpawnDelay = 1f;
 	public float maxSpawnDelay = 3f;
@@ -41,9 +41,15 @@ public class MeteorSpawn : MonoBehaviour
 		Vector3 spawnPos = transform.position + new Vector3(random, 0f, 0f);
 		// Инициализируется (создается) метеор в новой точке, 
 		// задавая вращение по умолчанию
-		Instantiate(meteorPrefab, spawnPos, Quaternion.identity);
+		Instantiate(SelectRandMeteor(), spawnPos, Quaternion.identity);
 
 		// Функция спауна вызывается снова через случайный промежуток времени
 		Invoke("Spawn", Random.Range(minSpawnDelay, maxSpawnDelay - step));
+	}
+
+	private GameObject SelectRandMeteor()
+	{
+		var index = Random.Range(0, meteorPrefab.Length);
+		return meteorPrefab[index];
 	}
 }
