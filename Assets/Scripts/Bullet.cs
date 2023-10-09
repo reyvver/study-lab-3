@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
 	// Обратите внимание на этот раз это локальная переменная
 	GameManager gameManager;
 	[SerializeField] private RigidbodyExtension[] bullets;
-
+	private int currentBullets;
 	void Start()
 	{
 		// Пока игра не запущена и снарядов на сцене нет, обращаться 
@@ -18,16 +18,36 @@ public class Bullet : MonoBehaviour
 
 		foreach (var rb in bullets)
 		{
-			var angle = rb.Rotation;
 			rb.AddForce(rb.transform.up * speed, ForceMode2D.Impulse);
-			rb.CollistionEnter += OnCollisionEnter2D;
+			rb.CollistionEnter += BulletCollision;
+		}
+
+		gameManager.Stop += StopBullets;
+		currentBullets = bullets.Length;
+	}
+
+	private void StopBullets()
+	{
+		foreach (var rb in bullets)
+		{
+			rb.SetStatic();
+			rb.CollistionEnter -= BulletCollision;
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D other)
+	private void BulletCollision(GameObject bullet, GameObject other, bool meteor)
 	{
-		Destroy(other.gameObject); // Уничтожение метеора 
-		gameManager.AddScore(); // Увеличение счета 
-		Destroy(gameObject); // Уничтожение снаряда
+		currentBullets--;
+		if (meteor) 
+		{
+			Destroy(other.gameObject); // Уничтожение метеора
+			gameManager.AddScore(); // Увеличение счета 
+		}
+		
+		Destroy(bullet.gameObject); 
+		if (currentBullets == 0)
+		{
+			Destroy(gameObject);
+		}
 	}
 }

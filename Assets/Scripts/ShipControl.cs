@@ -23,22 +23,38 @@ public class ShipControl : MonoBehaviour
 
 	private ShootingSet current;
 	private int setId;
+	private bool shipStopped;
+	private Vector2 screenBounds;
 
 	private void Awake()
 	{
+		screenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+		var sp = GetComponent<SpriteRenderer>();
+		screenBounds.x -= sp.sprite.bounds.size.x/2;
+		screenBounds.y-= sp.sprite.bounds.size.y/2;
 		setId = 1;
+		gameManager.Stop += StopShip;
 		ChangeSet();
+	}
+
+	private void StopShip()
+	{
+		shipStopped = true;
+		transform.GetComponent<Animator>().enabled = false;
 	}
 
 	void Update()
 	{
+		if (shipStopped) return;
 		elapsedTime += Time.deltaTime;
 
 		float xInput = Input.GetAxis("Horizontal");
-		transform.Translate(xInput * speed * Time.deltaTime, 0f, 0f);
-
+		float yInput = Input.GetAxis("Vertical");
+		transform.Translate(xInput * speed * Time.deltaTime, yInput * speed * Time.deltaTime, 0f);
+		
 		Vector3 position = transform.position;
-		position.x = Mathf.Clamp(position.x, -xLimit, xLimit);
+		position.x = Mathf.Clamp(position.x, -screenBounds.x, screenBounds.x);
+		position.y = Mathf.Clamp(position.y, -screenBounds.y, screenBounds.y);
 		transform.position = position;
 
 		if (elapsedTime > current.reload)
